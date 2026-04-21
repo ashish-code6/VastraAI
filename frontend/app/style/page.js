@@ -1,0 +1,11 @@
+import StylePageView from "../../components/StylePageView";
+
+export const metadata = {
+  title: "Style Quiz",
+  description:
+    "Take the VastraAI style quiz to share your occasion, budget, vibe, and color preferences for personalized outfit recommendations.",
+};
+
+export default function StylePage() {
+  return <StylePageView />;
+}
