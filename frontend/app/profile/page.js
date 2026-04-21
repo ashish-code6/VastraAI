@@ -1,4 +1,5 @@
 import ProfilePageView from "../../components/ProfilePageView";
+import RequireAuth from "../../components/RequireAuth";
 
 export const metadata = {
   title: "Profile",
@@ -7,5 +8,9 @@ export const metadata = {
 };
 
 export default function ProfilePage() {
-  return <ProfilePageView />;
+  return (
+    <RequireAuth redirectTo="/login?next=/profile">
+      <ProfilePageView />
+    </RequireAuth>
+  );
 }

@@ -30,6 +30,23 @@ function createSessionToken() {
   return crypto.randomBytes(24).toString("hex");
 }
 
+function serializeUser(user) {
+  return {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    avatarUrl: user.avatarUrl || "",
+    preferences: user.preferences || [],
+    stats: {
+      looksGenerated: user.stats?.looksGenerated || 0,
+      looksSaved: user.stats?.looksSaved || 0,
+      styleQuizzes: user.stats?.styleQuizzes || 0,
+    },
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  };
+}
+
 async function storeOtp({ email, otp, purpose, payload }) {
   await OtpRequest.findOneAndDelete({ email });
   await OtpRequest.create({
@@ -70,6 +87,25 @@ function sendError(res, status, message) {
 
 app.get("/health", (_req, res) => {
   res.json({ success: true, message: "VastraAI auth server is running." });
+});
+
+app.get("/users/profile", async (req, res) => {
+  const email = normalizeEmail(req.query.email);
+
+  if (!email) {
+    return sendError(res, 400, "Email is required.");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return sendError(res, 404, "User not found.");
+  }
+
+  return res.json({
+    success: true,
+    user: serializeUser(user),
+  });
 });
 
 app.post("/auth/signup/send-otp", async (req, res) => {
@@ -130,11 +166,7 @@ app.post("/auth/signup/verify-otp", async (req, res) => {
   return res.json({
     success: true,
     message: "Signup successful.",
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-    },
+    user: serializeUser(user),
     token: createSessionToken(),
   });
 });
@@ -198,11 +230,7 @@ app.post("/auth/login/verify-otp", async (req, res) => {
   return res.json({
     success: true,
     message: "Login successful.",
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-    },
+    user: serializeUser(user),
     token: createSessionToken(),
   });
 });

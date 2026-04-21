@@ -1,4 +1,5 @@
 import StylePageView from "../../components/StylePageView";
+import RequireAuth from "../../components/RequireAuth";
 
 export const metadata = {
   title: "Style Quiz",
@@ -7,5 +8,9 @@ export const metadata = {
 };
 
 export default function StylePage() {
-  return <StylePageView />;
+  return (
+    <RequireAuth redirectTo="/login?next=/style">
+      <StylePageView />
+    </RequireAuth>
+  );
 }

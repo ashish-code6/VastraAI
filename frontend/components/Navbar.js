@@ -5,15 +5,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "./AuthProvider";
 
-const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/style", label: "Style" },
-  { href: "/saved", label: "Saved" },
-];
-
 export default function Navbar() {
   const pathname = usePathname();
   const { isAuthenticated, logout } = useAuth();
+  const navItems = isAuthenticated
+    ? [
+        { href: "/", label: "Home" },
+        { href: "/style", label: "Style" },
+        { href: "/saved", label: "Saved" },
+      ]
+    : [
+        { href: "/", label: "Home" },
+        { href: "/saved", label: "Saved" },
+      ];
   const authItems = isAuthenticated
     ? [
         { href: "/profile", label: "Profile", isButton: false },

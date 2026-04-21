@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useAuth } from "./AuthProvider";
 
@@ -9,8 +9,11 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 export default function AuthFormView({ mode }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login } = useAuth();
   const isSignup = mode === "signup";
+  const nextPath = searchParams.get("next");
+  const safeNextPath = nextPath?.startsWith("/") ? nextPath : "/profile";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -103,7 +106,7 @@ export default function AuthFormView({ mode }) {
         user: data.user,
         token: data.token,
       });
-      router.push("/profile");
+      router.push(safeNextPath);
     } catch (requestError) {
       setError(requestError.message || "Unable to verify OTP.");
     } finally {

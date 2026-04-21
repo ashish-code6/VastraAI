@@ -15,6 +15,29 @@ const userSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
+    avatarUrl: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    preferences: {
+      type: [String],
+      default: ["Casual", "Minimal", "Neutral Colors"],
+    },
+    stats: {
+      looksGenerated: {
+        type: Number,
+        default: 0,
+      },
+      looksSaved: {
+        type: Number,
+        default: 0,
+      },
+      styleQuizzes: {
+        type: Number,
+        default: 1,
+      },
+    },
   },
   {
     timestamps: true,
