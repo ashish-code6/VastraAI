@@ -1,4 +1,5 @@
 import "./globals.css";
+import { AuthProvider } from "../components/AuthProvider";
 import Navbar from "../components/Navbar";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -44,8 +45,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full bg-slate-50 text-slate-700">
-        <Navbar />
-        <main>{children}</main>
+        <AuthProvider>
+          <Navbar />
+          <main>{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );

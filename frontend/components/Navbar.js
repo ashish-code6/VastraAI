@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "./AuthProvider";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -12,11 +13,11 @@ const navItems = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const isAuthenticated = false;
+  const { isAuthenticated, logout } = useAuth();
   const authItems = isAuthenticated
     ? [
         { href: "/profile", label: "Profile", isButton: false },
-        { href: "/logout", label: "Logout", isButton: false },
+        { href: "#", label: "Logout", isButton: false, action: logout },
       ]
     : [
         { href: "/login", label: "Login", isButton: false },
@@ -74,6 +75,7 @@ export default function Navbar() {
               </Link>
               <button
                 type="button"
+                onClick={logout}
                 className="text-sm font-medium text-slate-600 transition-colors duration-200 hover:text-[#6C3BFF]"
               >
                 Logout
@@ -121,19 +123,30 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            {authItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={
-                  item.isButton
-                    ? "rounded-full bg-[#6C3BFF] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#5a2fe0]"
-                    : "text-sm font-medium text-slate-600 transition-colors duration-200 hover:text-[#6C3BFF]"
-                }
-              >
-                {item.label}
-              </Link>
-            ))}
+            {authItems.map((item) =>
+              item.action ? (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={item.action}
+                  className="text-sm font-medium text-slate-600 transition-colors duration-200 hover:text-[#6C3BFF]"
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={
+                    item.isButton
+                      ? "rounded-full bg-[#6C3BFF] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#5a2fe0]"
+                      : "text-sm font-medium text-slate-600 transition-colors duration-200 hover:text-[#6C3BFF]"
+                  }
+                >
+                  {item.label}
+                </Link>
+              ),
+            )}
           </div>
         </div>
       </div>

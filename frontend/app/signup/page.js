@@ -1,3 +1,5 @@
+import AuthFormView from "../../components/AuthFormView";
+
 export const metadata = {
   title: "Sign Up",
   description:
@@ -5,13 +7,5 @@ export const metadata = {
 };
 
 export default function SignupPage() {
-  return (
-    <section className="px-6 py-16">
-      <div className="mx-auto max-w-4xl">
-        <h1 className="text-4xl font-semibold tracking-tight text-slate-800">
-          Create your VastraAI account
-        </h1>
-      </div>
-    </section>
-  );
+  return <AuthFormView mode="signup" />;
 }
